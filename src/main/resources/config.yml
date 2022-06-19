@@ -1,0 +1,11 @@
+BotInfo:
+  Token:  #put it inside ""
+  OwnerID:
+  ServerID:
+Settings:
+  Status: "DND" #Available statuses: DND, ONLINE, IDLE, INVISIBLE
+  Activity: "PLAYING" #Available activities: PLAYING, WATCHING, LISTENING (Leave blank for nothing)
+  ActivityName: "Supporting people !"
+  TicketsCategory:  #Category under which tickets will be created
+  SupportRole:  #ID of your support role
+  TicketName: "%name's ticket"
