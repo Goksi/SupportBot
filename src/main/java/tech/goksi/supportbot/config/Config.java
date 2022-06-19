@@ -13,9 +13,11 @@ import java.nio.file.Files;
 public final class Config {
     private YamlFile config = null;
     private File configFile;
+    private File embedJson;
     private final Logger logger;
     public Config(){
         configFile = new File("config.yml");
+        embedJson = new File("embed.json");
         logger = LoggerFactory.getLogger(getClass().getName());
     }
     public void reloadConfig() {
@@ -30,25 +32,19 @@ public final class Config {
     public void initConfig(){
         if(!configFile.exists()){
             InputStream is = this.getClass().getClassLoader().getResourceAsStream("config.yml");
-            assert is!=null;
-            try{
-                try (OutputStream out = Files.newOutputStream(configFile.toPath())) {
-                    byte[] buffer = new byte[1024];
-                    int len;
-                    while ((len = is.read(buffer)) > 0) {
-                        out.write(buffer, 0, len);
-                    }
-                }
-            }catch (IOException e){
-                logger.error("Error while writing configuration file !", e);
-            }
-
+            assert is != null;
+            writeFile(is, configFile);
         }
         config = new YamlFile(configFile);
         try{
             config.loadWithComments();
         } catch (IOException e){
             logger.error("Error while reading configuration file !", e);
+        }
+        if(!embedJson.exists()){
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("embed.json");
+            assert is != null;
+            writeFile(is, embedJson);
         }
 
     }
@@ -64,5 +60,20 @@ public final class Config {
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    private void writeFile(InputStream is, File file){
+        try{
+            try (OutputStream out = Files.newOutputStream(file.toPath())) {
+                byte[] buffer = new byte[1024];
+                int len;
+                while ((len = is.read(buffer)) > 0) {
+                    out.write(buffer, 0, len);
+                }
+            }
+        }catch (IOException e){
+            logger.error("Error while writing configuration file !", e);
+        }
+
     }
 }
