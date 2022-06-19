@@ -6,13 +6,11 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.TextChannel;
 import org.simpleyaml.configuration.file.YamlFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.goksi.supportbot.config.Config;
-import tech.goksi.supportbot.tickets.TicketChannel;
+import tech.goksi.supportbot.tickets.TicketCommand;
 import tech.goksi.supportbot.utils.Constants;
 
 import javax.security.auth.login.LoginException;
@@ -61,8 +59,7 @@ public class Bot {
                 builder.setActivity(Activity.listening(activity));
                 break;
         }
-
-
+        builder.addSlashCommand(new TicketCommand());
         CommandClient client = builder.build();
         try{
             jda = JDABuilder.build();
@@ -92,8 +89,8 @@ public class Bot {
         logger.error("Looks like you didn't setup your bot properly, please look back and edit config.yml file !");
         System.exit(1);
     }
-    public Guild getGuild(){
-        return jda.getGuilds().get(0);
-    }
 
+    public JDA getJda() {
+        return jda;
+    }
 }
