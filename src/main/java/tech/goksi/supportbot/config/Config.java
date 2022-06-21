@@ -13,7 +13,7 @@ import java.nio.file.Files;
 public final class Config {
     private YamlFile config = null;
     private File configFile;
-    private File embedJson;
+    private final File embedJson;
     private final Logger logger;
     public Config(){
         configFile = new File("config.yml");
