@@ -9,3 +9,12 @@ Settings:
   TicketsCategory:  #Category under which tickets will be created
   SupportRole:  #ID of your support role
   TicketName: "%name's ticket"
+  StaffChannel:   #Embeds for tickets would be sent here
+Tickets:
+  ModalTitle: "Issue report !"
+  IssueTitle: "Issue"
+  ModalTitlePlaceholder: "What's the issue ?"
+  IssueDescription: "Issue description"
+  ModalDescriptionPlaceholder: "Describe your issue here !"
+  SentIssue: "Successfully sent issue!"
+  ButtonText: "☑ Open ticket"

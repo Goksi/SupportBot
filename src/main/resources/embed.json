@@ -1,8 +1,8 @@
 {
   "embed": {
     "author": {
-      "name": "Гокси#2772",
-      "icon_url": "https://cdn.discordapp.com/avatars/291491141235507200/a_df8a606dad69f1c9d3cee4fe7926a562.gif?size=256"
+      "name": "%name",
+      "icon_url": "%iconUrl"
     },
     "title": "New Issue report !",
     "description": "%modalTitle",
@@ -15,7 +15,8 @@
     ],
     "color": 39129,
     "footer": {
-      "text": "SupportBot"
+      "text": "SupportBot",
+      "icon_url": "%footerUrl"
     },
     "thumbnail": {
       "url": "https://images-ext-1.discordapp.net/external/fLrY5R_82q7LDv_QG4RErJnxI7SoVHc0TnzxOxq-cbc/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/913832514005643314/df612a912243f84fcce186ff1d3fbf2f.png"
