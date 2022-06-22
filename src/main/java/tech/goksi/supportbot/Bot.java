@@ -10,6 +10,7 @@ import org.simpleyaml.configuration.file.YamlFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.goksi.supportbot.config.Config;
+import tech.goksi.supportbot.events.ModalListener;
 import tech.goksi.supportbot.tickets.TicketCommand;
 import tech.goksi.supportbot.utils.Constants;
 
@@ -67,7 +68,7 @@ public class Bot {
             logger.error("Bot token you provided is not valid, please check it again !", e);
             System.exit(1);
         }
-        jda.addEventListener(client);
+        jda.addEventListener(client, new ModalListener());
         try{
             jda.awaitReady();
         }catch (InterruptedException e){
