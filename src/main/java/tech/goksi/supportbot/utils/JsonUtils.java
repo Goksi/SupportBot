@@ -6,37 +6,40 @@ import com.google.gson.JsonPrimitive;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
+import tech.goksi.supportbot.Bot;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class JsonUtils {
-    public static MessageEmbed jsonToEmbed(JsonObject json, User user, String modalTitle, String modalDescription){
-        EmbedBuilder embedBuilder = new EmbedBuilder();
 
+    public static MessageEmbed jsonToEmbed(JsonObject jsonMain, User user, String modalTitle, String modalDescription){
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        JsonObject json = jsonMain.getAsJsonObject("embed");
         JsonPrimitive titleObj = json.getAsJsonPrimitive("title");
         if (titleObj != null){
-            embedBuilder.setTitle(titleObj.getAsString().replaceAll("%modalTitle", modalTitle));
+            String title = titleObj.getAsString();
+            embedBuilder.setTitle(title);
         }
 
         JsonObject authorObj = json.getAsJsonObject("author");
         if (authorObj != null) {
             String authorName = authorObj.get("name").getAsString().replaceAll("%name", user.getAsTag());
-            String authorIconUrl = authorObj.get("icon_url").getAsString();
-            if (authorIconUrl != null)
-                embedBuilder.setAuthor(authorName, authorIconUrl);
+            if (user.getAvatarUrl() != null)
+                embedBuilder.setAuthor(authorName,null, authorObj.get("icon_url").getAsString().replaceAll("%iconUrl", user.getAvatarUrl()));
             else
                 embedBuilder.setAuthor(authorName);
         }
 
         JsonPrimitive descObj = json.getAsJsonPrimitive("description");
         if (descObj != null){
-            embedBuilder.setDescription(descObj.getAsString().replaceAll("%modalDesc", modalDescription));
+            String desc = descObj.getAsString().replaceAll("%modalTitle", modalTitle);
+            embedBuilder.setDescription(desc);
         }
 
         JsonPrimitive colorObj = json.getAsJsonPrimitive("color");
         if (colorObj != null){
-            Color color = new Color(colorObj.getAsInt());
-            embedBuilder.setColor(color);
+            embedBuilder.setColor(new Color(colorObj.getAsInt()));
         }
 
         JsonArray fieldsArray = json.getAsJsonArray("fields");
@@ -44,23 +47,21 @@ public class JsonUtils {
 
             fieldsArray.forEach(field -> {
                 String name = field.getAsJsonObject().get("name").getAsString();
-                String content = field.getAsJsonObject().get("value").getAsString();
+                String content = field.getAsJsonObject().get("value").getAsString().replaceAll("%modalDesc", modalDescription);
                 boolean inline = field.getAsJsonObject().get("inline").getAsBoolean();
                 embedBuilder.addField(name, content, inline);
             });
         }
-        JsonPrimitive thumbnailObj = json.getAsJsonPrimitive("thumbnail");
+        JsonObject thumbnailObj = json.getAsJsonObject("thumbnail");
         if (thumbnailObj != null){
-            embedBuilder.setThumbnail(thumbnailObj.getAsString());
+            embedBuilder.setThumbnail(thumbnailObj.get("url").getAsString());
         }
 
         JsonObject footerObj = json.getAsJsonObject("footer");
         if (footerObj != null){
             String content = footerObj.get("text").getAsString();
-            String footerIconUrl = footerObj.get("icon_url").getAsString();
-
-            if (footerIconUrl != null)
-                embedBuilder.setFooter(content, footerIconUrl);
+            if (footerObj.has("icon_url"))
+                embedBuilder.setFooter(content, footerObj.get("icon_url").getAsString().replaceAll("%footerUrl", Objects.requireNonNull(Bot.getInstance().getJda().getSelfUser().getAvatarUrl())));
             else
                 embedBuilder.setFooter(content);
         }

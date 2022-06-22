@@ -11,4 +11,5 @@ public class Constants {
     public static final String GUILD_ID = Bot.getInstance().getConfig().getString("BotInfo.ServerID");
     public static final String TICKET_CATEGORY_ID = Bot.getInstance().getConfig().getString("Settings.TicketsCategory");
     public static final String SUPPORT_ROLE_ID = Bot.getInstance().getConfig().getString("Settings.SupportRole");
+    public static final String STAFF_CHANNEL = Bot.getInstance().getConfig().getString("Settings.StaffChannel");
 }
