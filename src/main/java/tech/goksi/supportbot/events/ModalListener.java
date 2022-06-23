@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.goksi.supportbot.Bot;
+import tech.goksi.supportbot.utils.CommonUtils;
 import tech.goksi.supportbot.utils.Constants;
 import tech.goksi.supportbot.utils.JsonUtils;
 import tech.goksi.supportbot.utils.Web;
@@ -60,7 +61,11 @@ public class ModalListener extends ListenerAdapter {
                     event.replyEmbeds(eb.build()).setEphemeral(true).queue();
                 }
             }
-            staffChannel.sendMessageEmbeds(JsonUtils.jsonToEmbed(embedJson, event.getUser(), title, description))
+            String embedString = embedJson.toString();
+            embedString = CommonUtils.formatString(embedString, "%name", event.getUser().getAsTag(), "%modalDesc", description, "%modalTitle", title,
+                    "%iconUrl", event.getUser().getAvatarUrl()==null ? "https://cdn.discordapp.com/embed/avatars/1.png" : event.getUser().getAvatarUrl(), "%botAvatarUrl", event.getJDA().getSelfUser().getAvatarUrl());
+            embedJson = JsonParser.parseString(embedString).getAsJsonObject();
+            staffChannel.sendMessageEmbeds(JsonUtils.jsonToEmbed(embedJson))
                     .setActionRow(Button.of(ButtonStyle.SUCCESS, String.format("openTicket:%d", event.getUser().getIdLong()), Bot.getInstance().getConfig().getString("Tickets.ButtonText")))
                     .queue();
             event.reply(Bot.getInstance().getConfig().getString("Tickets.SentIssue")).setEphemeral(true).queue();

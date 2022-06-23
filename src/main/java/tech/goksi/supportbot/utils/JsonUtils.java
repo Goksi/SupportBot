@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
 import tech.goksi.supportbot.Bot;
 
 import java.awt.*;
@@ -13,7 +12,7 @@ import java.util.Objects;
 
 public class JsonUtils {
 
-    public static MessageEmbed jsonToEmbed(JsonObject jsonMain, User user, String modalTitle, String modalDescription){
+    public static MessageEmbed jsonToEmbed(JsonObject jsonMain){
         EmbedBuilder embedBuilder = new EmbedBuilder();
         JsonObject json = jsonMain.getAsJsonObject("embed");
         JsonPrimitive titleObj = json.getAsJsonPrimitive("title");
@@ -24,16 +23,14 @@ public class JsonUtils {
 
         JsonObject authorObj = json.getAsJsonObject("author");
         if (authorObj != null) {
-            String authorName = authorObj.get("name").getAsString().replaceAll("%name", user.getAsTag());
-            if (user.getAvatarUrl() != null)
-                embedBuilder.setAuthor(authorName,null, authorObj.get("icon_url").getAsString().replaceAll("%iconUrl", user.getAvatarUrl()));
-            else
-                embedBuilder.setAuthor(authorName);
+            String authorName = authorObj.get("name").getAsString();
+            embedBuilder.setAuthor(authorName,null, authorObj.get("icon_url").getAsString());
+
         }
 
         JsonPrimitive descObj = json.getAsJsonPrimitive("description");
         if (descObj != null){
-            String desc = descObj.getAsString().replaceAll("%modalTitle", modalTitle);
+            String desc = descObj.getAsString();
             embedBuilder.setDescription(desc);
         }
 
@@ -47,7 +44,7 @@ public class JsonUtils {
 
             fieldsArray.forEach(field -> {
                 String name = field.getAsJsonObject().get("name").getAsString();
-                String content = field.getAsJsonObject().get("value").getAsString().replaceAll("%modalDesc", modalDescription);
+                String content = field.getAsJsonObject().get("value").getAsString();
                 boolean inline = field.getAsJsonObject().get("inline").getAsBoolean();
                 embedBuilder.addField(name, content, inline);
             });
