@@ -6,11 +6,14 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.simpleyaml.configuration.file.YamlFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.goksi.supportbot.config.Config;
 import tech.goksi.supportbot.events.ModalListener;
+import tech.goksi.supportbot.events.OpenTicketListener;
 import tech.goksi.supportbot.tickets.TicketCommand;
 import tech.goksi.supportbot.utils.Constants;
 
@@ -61,6 +64,8 @@ public class Bot {
                 break;
         }
         builder.addSlashCommand(new TicketCommand());
+        JDABuilder.enableIntents(GatewayIntent.GUILD_MEMBERS, GatewayIntent.GUILD_MESSAGES);
+        JDABuilder.setMemberCachePolicy(MemberCachePolicy.ALL);
         CommandClient client = builder.build();
         try{
             jda = JDABuilder.build();
@@ -68,7 +73,8 @@ public class Bot {
             logger.error("Bot token you provided is not valid, please check it again !", e);
             System.exit(1);
         }
-        jda.addEventListener(client, new ModalListener());
+        jda.addEventListener(client, new ModalListener(), new OpenTicketListener());
+
         try{
             jda.awaitReady();
         }catch (InterruptedException e){
