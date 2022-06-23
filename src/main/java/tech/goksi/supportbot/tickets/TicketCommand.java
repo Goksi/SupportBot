@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import tech.goksi.supportbot.Bot;
 
+import java.util.Objects;
+
 public class TicketCommand extends SlashCommand {
     public TicketCommand(){
         this.name = "ticket";
@@ -15,6 +17,10 @@ public class TicketCommand extends SlashCommand {
     }
     @Override
     protected void execute(SlashCommandEvent event) {
+        if(TicketUtils.hasMoreThenAllowed(Objects.requireNonNull(event.getMember()))){
+            event.reply(Bot.getInstance().getConfig().getString("Tickets.MaxExtended")).setEphemeral(true).queue();
+            return;
+        }
         TextInput title = TextInput.create("title", Bot.getInstance().getConfig().getString("Tickets.IssueTitle"), TextInputStyle.SHORT)
                 .setPlaceholder(Bot.getInstance().getConfig().getString("Tickets.ModalTitlePlaceholder")).setMinLength(3).setMaxLength(35).build();
         TextInput desc = TextInput.create("desc", Bot.getInstance().getConfig().getString("Tickets.IssueDescription"), TextInputStyle.PARAGRAPH).setMaxLength(1500)
