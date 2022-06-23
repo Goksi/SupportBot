@@ -1,10 +1,10 @@
 package tech.goksi.supportbot.tickets;
 
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.IPermissionHolder;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
+import net.dv8tion.jda.internal.utils.PermissionUtil;
 import org.jetbrains.annotations.NotNull;
 import tech.goksi.supportbot.Bot;
 import tech.goksi.supportbot.exceptions.ConfigException;
@@ -14,22 +14,20 @@ import java.util.*;
 
 public final class TicketUtils {
 
-    private static final Map<Long, List<Long>> tickets; //<ChannelID, List of people in channel>
+    private static final Map<Long, Long> tickets; //<ChannelID, OwnerID>
 
     static {
         tickets = new HashMap<>();
     }
-    public static @NotNull TextChannel createTicket(long issuerId, long openedTicket) throws ConfigException{
+
+    public static @NotNull TextChannel createTicket(long issuerId, ButtonInteractionEvent e) throws ConfigException{
         if(Constants.TICKET_CATEGORY_ID == null) throw new ConfigException("TicketCategory is not set inside of config.yml");
         if(Constants.SUPPORT_ROLE_ID == null) throw new ConfigException("Support role is not set inside of config.yml");
         User issuer = Bot.getInstance().getJda().retrieveUserById(issuerId).complete();
-        User openedIssue = Bot.getInstance().getJda().retrieveUserById(openedTicket).complete();
         TextChannel ticketChannel = Objects.requireNonNull(Bot.getInstance().getJda().getCategoryById(Constants.TICKET_CATEGORY_ID)).createTextChannel(Bot.getInstance().getConfig().getString("Settings.TicketName")
                 .replaceAll("%name", issuer.getName())).complete();
-        tickets.put(ticketChannel.getIdLong(), new ArrayList<>());
-        tickets.get(ticketChannel.getIdLong()).add(issuerId);
-        tickets.get(ticketChannel.getIdLong()).add(openedTicket);
-        ticketChannel.upsertPermissionOverride((IPermissionHolder) issuer).setAllowed(
+        tickets.put(ticketChannel.getIdLong(), issuerId);
+        ticketChannel.upsertPermissionOverride(Objects.requireNonNull(Objects.requireNonNull(e.getGuild()).getMemberById(issuerId))).setAllowed(
                 Permission.MESSAGE_SEND,
                 Permission.MESSAGE_HISTORY,
                 Permission.MESSAGE_ATTACH_FILES,
@@ -37,7 +35,7 @@ public final class TicketUtils {
                 Permission.MESSAGE_EXT_EMOJI,
                 Permission.VIEW_CHANNEL
         ).reason("Adding ticket creator to the channel").queue();
-        ticketChannel.upsertPermissionOverride((IPermissionHolder) Bot.getInstance().getJda().getSelfUser()).setAllowed(
+        ticketChannel.upsertPermissionOverride(Objects.requireNonNull(e.getGuild()).getSelfMember()).setAllowed(
                 Permission.MESSAGE_SEND,
                 Permission.MESSAGE_HISTORY,
                 Permission.MESSAGE_ATTACH_FILES,
@@ -46,7 +44,7 @@ public final class TicketUtils {
                 Permission.VIEW_CHANNEL,
                 Permission.MESSAGE_MANAGE
         ).reason("Adding bot to the channel").queue();
-        ticketChannel.upsertPermissionOverride((IPermissionHolder) openedIssue).setAllowed(
+        ticketChannel.upsertPermissionOverride(Objects.requireNonNull(e.getMember())).setAllowed(
                 Permission.MESSAGE_SEND,
                 Permission.MESSAGE_HISTORY,
                 Permission.MESSAGE_ATTACH_FILES,
@@ -55,6 +53,9 @@ public final class TicketUtils {
                 Permission.VIEW_CHANNEL,
                 Permission.MESSAGE_MANAGE
         ).reason("Adding staff role to the channel").queue();
+        ticketChannel.upsertPermissionOverride(e.getGuild().getPublicRole()).setDenied(
+                Permission.VIEW_CHANNEL
+        ).reason("Removing public role from the channel").queue();
         return ticketChannel;
     }
 
@@ -62,15 +63,24 @@ public final class TicketUtils {
         return tickets.containsKey(textChannel.getIdLong());
     }
 
-
-    public static boolean isInTicket(@NotNull User user, @NotNull TextChannel textChannel){
-        return tickets.get(textChannel.getIdLong()).contains(user.getIdLong());
+    public static boolean canInteract(@NotNull Member member, @NotNull TextChannel textChannel){
+        return PermissionUtil.checkPermission(textChannel, member, Permission.VIEW_CHANNEL);
     }
 
-    public static void addToChannel(User user, TextChannel ticketChannel){
+    public static boolean hasMoreThenAllowed(@NotNull Member member){
+        return tickets.values().stream()
+                .filter(id -> id == member.getIdLong())
+                .count() > Bot.getInstance().getConfig().getInt("Tickets.MaxTickets");
+    }
+
+    public static void closeTicket(@NotNull TextChannel textChannel){
+        tickets.remove(textChannel.getIdLong());
+        textChannel.delete().queue();
+    }
+
+    public static void addToChannel(Member member, TextChannel ticketChannel ){
         if(!isTicketChannel(ticketChannel)) return;
-        tickets.get(ticketChannel.getIdLong()).add(user.getIdLong());
-        ticketChannel.upsertPermissionOverride((IPermissionHolder) user).setAllowed(
+        ticketChannel.upsertPermissionOverride(Objects.requireNonNull(member)).setAllowed(
                 Permission.MESSAGE_SEND,
                 Permission.MESSAGE_HISTORY,
                 Permission.MESSAGE_ATTACH_FILES,
