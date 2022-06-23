@@ -8,9 +8,11 @@ Settings:
   ActivityName: "Supporting people !"
   TicketsCategory:  #Category under which tickets will be created
   SupportRole:  #ID of your support role
-  TicketName: "%name's ticket"
+  TicketName: "%name\'s ticket"
   StaffChannel:   #Embeds for tickets would be sent here
 Tickets:
+  MaxTickets: 5 #Maximum number of tickets per user
+  MaxExtended: "You have reached the maximum amount of tickets allowed for you, please wait for one to be closed"
   ModalTitle: "Issue report !"
   IssueTitle: "Issue"
   ModalTitlePlaceholder: "What's the issue ?"

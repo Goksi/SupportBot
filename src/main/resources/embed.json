@@ -16,7 +16,7 @@
     "color": 39129,
     "footer": {
       "text": "SupportBot",
-      "icon_url": "%footerUrl"
+      "icon_url": "%botAvatarUrl"
     },
     "thumbnail": {
       "url": "https://images-ext-1.discordapp.net/external/fLrY5R_82q7LDv_QG4RErJnxI7SoVHc0TnzxOxq-cbc/%3Fsize%3D2048/https/cdn.discordapp.com/avatars/913832514005643314/df612a912243f84fcce186ff1d3fbf2f.png"
