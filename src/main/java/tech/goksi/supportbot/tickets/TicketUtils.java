@@ -8,6 +8,7 @@ import net.dv8tion.jda.internal.utils.PermissionUtil;
 import org.jetbrains.annotations.NotNull;
 import tech.goksi.supportbot.Bot;
 import tech.goksi.supportbot.exceptions.ConfigException;
+import tech.goksi.supportbot.utils.CommonUtil;
 import tech.goksi.supportbot.utils.Constants;
 
 import java.util.*;
@@ -25,7 +26,7 @@ public final class TicketUtils {
         if(Constants.SUPPORT_ROLE_ID == null) throw new ConfigException("Support role is not set inside of config.yml");
         User issuer = Bot.getInstance().getJda().retrieveUserById(issuerId).complete();
         TextChannel ticketChannel = Objects.requireNonNull(Bot.getInstance().getJda().getCategoryById(Constants.TICKET_CATEGORY_ID)).createTextChannel(Bot.getInstance().getConfig().getString("Settings.TicketName")
-                .replaceAll("%name", issuer.getName())).complete();
+                .replaceAll("%name", issuer.getName()).replaceAll("%randomID", String.valueOf(CommonUtil.randomInt()))).complete();
         tickets.put(ticketChannel.getIdLong(), issuerId);
         ticketChannel.upsertPermissionOverride(Objects.requireNonNull(Objects.requireNonNull(e.getGuild()).getMemberById(issuerId))).setAllowed(
                 Permission.MESSAGE_SEND,

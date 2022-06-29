@@ -13,10 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.goksi.supportbot.Bot;
-import tech.goksi.supportbot.utils.CommonUtils;
+import tech.goksi.supportbot.utils.CommonUtil;
 import tech.goksi.supportbot.utils.Constants;
 import tech.goksi.supportbot.utils.JsonUtils;
-import tech.goksi.supportbot.utils.Web;
 
 import java.awt.*;
 
@@ -44,16 +43,16 @@ public class ModalListener extends ListenerAdapter {
             String description = Objects.requireNonNull(event.getValue("desc")).getAsString();
             JsonObject embedJson;
             try {
-                 embedJson = (JsonObject) JsonParser.parseReader(new FileReader("embed.json"));
+                 embedJson = (JsonObject) JsonParser.parseReader(new FileReader("TicketEmbed.json"));
             } catch (IOException e) {
-                logger.error("Error while reading embed.json file !", e);
+                logger.error("Error while reading TicketEmbed.json file !", e);
                 return;
             }
 
             assert staffChannel != null;
             if(description.length() > 1024){
                 try {
-                    description = Web.uploadToHaste(description);
+                    description = CommonUtil.uploadToHaste(description);
                 } catch (IOException e) {
                     logger.error("Error while uploading to hastebin !", e);
                     eb.setColor(Color.red);
@@ -62,7 +61,7 @@ public class ModalListener extends ListenerAdapter {
                 }
             }
             String embedString = embedJson.toString();
-            embedString = CommonUtils.formatString(embedString, "%name", event.getUser().getAsTag(), "%modalDesc", description, "%modalTitle", title,
+            embedString = CommonUtil.formatString(embedString, "%name", event.getUser().getAsTag(), "%modalDesc", description, "%modalTitle", title,
                     "%iconUrl", event.getUser().getAvatarUrl()==null ? "https://cdn.discordapp.com/embed/avatars/1.png" : event.getUser().getAvatarUrl(), "%botAvatarUrl", event.getJDA().getSelfUser().getAvatarUrl());
             embedJson = JsonParser.parseString(embedString).getAsJsonObject();
             staffChannel.sendMessageEmbeds(JsonUtils.jsonToEmbed(embedJson))
