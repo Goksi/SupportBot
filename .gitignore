@@ -1,10 +1,14 @@
 .idea
 target/
 test
+!/src/main/java/**/*.java
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+/CloseTicketEmbed.json
+/TicketEmbed.json
 /embed.json
+/AddToTicketEmbed.json
 ### IntelliJ IDEA ###
 *.iws
 *.iml
