@@ -13,11 +13,15 @@ import java.nio.file.Files;
 public final class Config {
     private YamlFile config = null;
     private File configFile;
-    private final File embedJson;
+    private final File ticketEmbedFile;
+    private final File closeTicketEmbedFile;
+    private final File addToTicketEmbedFile;
     private final Logger logger;
     public Config(){
         configFile = new File("config.yml");
-        embedJson = new File("embed.json");
+        ticketEmbedFile = new File("TicketEmbed.json");
+        closeTicketEmbedFile = new File("CloseTicketEmbed.json");
+        addToTicketEmbedFile = new File("AddToTicketEmbed.json");
         logger = LoggerFactory.getLogger(getClass().getName());
     }
     public void reloadConfig() {
@@ -41,10 +45,20 @@ public final class Config {
         } catch (IOException e){
             logger.error("Error while reading configuration file !", e);
         }
-        if(!embedJson.exists()){
-            InputStream is = this.getClass().getClassLoader().getResourceAsStream("embed.json");
+        if(!ticketEmbedFile.exists()){
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("TicketEmbed.json");
             assert is != null;
-            writeFile(is, embedJson);
+            writeFile(is, ticketEmbedFile);
+        }
+        if(!closeTicketEmbedFile.exists()){
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("CloseTicketEmbed.json");
+            assert is != null;
+            writeFile(is, closeTicketEmbedFile);
+        }
+        if(!addToTicketEmbedFile.exists()){
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream("AddToTicketEmbed.json");
+            assert is != null;
+            writeFile(is, addToTicketEmbedFile);
         }
 
     }
