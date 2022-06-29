@@ -8,7 +8,7 @@ Settings:
   ActivityName: "Supporting people !"
   TicketsCategory:  #Category under which tickets will be created
   SupportRole:  #ID of your support role
-  TicketName: "%name\'s ticket"
+  TicketName: "%name's ticket"  #You can also use %randomID to generate a random ticket id
   StaffChannel:   #Embeds for tickets would be sent here
 Tickets:
   MaxTickets: 5 #Maximum number of tickets per user
@@ -20,3 +20,7 @@ Tickets:
   ModalDescriptionPlaceholder: "Describe your issue here !"
   SentIssue: "Successfully sent issue!"
   ButtonText: "☑ Open ticket"
+  CloseButtonText: "Close ticket"
+  AddToTicketYES: "YES"
+  AddToTicketNO: "NO"
+  CantAdd: "Sorry, but you cant add this person to channel !"
