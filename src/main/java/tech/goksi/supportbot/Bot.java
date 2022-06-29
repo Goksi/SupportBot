@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import tech.goksi.supportbot.config.Config;
 import tech.goksi.supportbot.events.ModalListener;
 import tech.goksi.supportbot.events.OpenTicketListener;
+import tech.goksi.supportbot.events.TicketListener;
 import tech.goksi.supportbot.tickets.TicketCommand;
 import tech.goksi.supportbot.utils.Constants;
 
@@ -73,7 +74,7 @@ public class Bot {
             logger.error("Bot token you provided is not valid, please check it again !", e);
             System.exit(1);
         }
-        jda.addEventListener(client, new ModalListener(), new OpenTicketListener());
+        jda.addEventListener(client, new ModalListener(), new OpenTicketListener(), new TicketListener());
 
         try{
             jda.awaitReady();
