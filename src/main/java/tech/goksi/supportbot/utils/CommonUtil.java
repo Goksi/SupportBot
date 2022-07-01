@@ -20,6 +20,8 @@ public class CommonUtil {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setDoOutput(true);
+        conn.addRequestProperty("User-Agent", "placeholder");
+        conn.addRequestProperty("Content-Type", "text/plain; charset=utf-8");
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(conn.getInputStream()))) {
             for (String line; (line = reader.readLine()) != null; ) {
