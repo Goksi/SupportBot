@@ -24,3 +24,9 @@ Tickets:
   AddToTicketYES: "YES"
   AddToTicketNO: "NO"
   CantAdd: "Sorry, but you cant add this person to channel !"
+Keywords:
+  test:
+    Response:
+      - "This is a test response"
+      - "This is another test response"
+    Emoji: "U+1F600" #this is going to be reacted on the message with keyword
