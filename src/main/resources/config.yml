@@ -25,8 +25,15 @@ Tickets:
   AddToTicketNO: "NO"
   CantAdd: "Sorry, but you cant add this person to channel !"
 Keywords:
+  #placeholders: %mention, %tag
+  hello:
+    Regex: "Hello"
+    Response:
+      - "Hello %mention, how can I help you ?"
+    Emoji: "U+1F44B"
   test:
+    Regex: ".*test.*" #this is regex, so you can use any regex here, for testing patterns you can use something like https://regexr.com/
     Response:
       - "This is a test response"
       - "This is another test response"
-    Emoji: "U+1F600" #this is going to be reacted on the message with keyword
+    Emoji: "U+1F600" #this is going to be reacted on the message with keyword (unicode)
