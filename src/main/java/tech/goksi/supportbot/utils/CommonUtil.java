@@ -1,6 +1,8 @@
 package tech.goksi.supportbot.utils;
 
 
+import net.dv8tion.jda.api.entities.Message;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,6 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -82,6 +85,17 @@ public class CommonUtil {
             newString = newString.replaceAll(replacements[i], replacements[i+1]);
         }
         return newString;
+    }
+
+    public static String readAttachment(Message.Attachment attachment){
+        if(Objects.equals(attachment.getFileExtension(), "txt")){
+            if(attachment.getSize() < Constants.MAX_ATTACHMENT_SIZE){
+                attachment.retrieveInputStream().thenAcceptAsync(is -> {
+
+                });
+            }
+        }
+        return null;
     }
 
 
