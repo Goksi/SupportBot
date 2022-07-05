@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 
 public class CommonUtil {
 
-    public static String read(String URL) throws Exception{
+    private static String readRaw(String URL) throws Exception{
         StringBuilder result = new StringBuilder();
         java.net.URL url = new URL(URL);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setDoOutput(true);
-        conn.addRequestProperty("User-Agent", "placeholder");
+        conn.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36'");
         conn.addRequestProperty("Content-Type", "text/plain; charset=utf-8");
         try (BufferedReader reader = new BufferedReader(
                 new InputStreamReader(conn.getInputStream()))) {
@@ -30,14 +30,23 @@ public class CommonUtil {
         }
         return result.toString();
     }
+    public static String read(String URL) throws Exception{
+        URL baseUrl = new URL(URL);
+        URL rawUrl = new URL(baseUrl, "/raw" + baseUrl.getPath());
+        HttpURLConnection conn = (HttpURLConnection) rawUrl.openConnection();
+        conn.setRequestMethod("HEAD");
+        conn.addRequestProperty("User-Agent", "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.92 Safari/537.36'");
+        conn.addRequestProperty("Content-Type", "text/plain; charset=utf-8");
+        if(conn.getResponseCode() == 200) {
+            return readRaw(rawUrl.toString());
+        }else return readRaw(URL);
+    }
 
     public static String uploadToHaste(String text) throws IOException {
         StringBuilder sb = new StringBuilder();
         int counter = 0;
         for(Character c : text.toCharArray()) {
-            if(counter == 0 && Character.isWhitespace(c)){
-                continue;
-            }
+            if(counter == 0 && Character.isWhitespace(c)) continue;
             sb.append(c);
             if(counter == 80){
                 sb.append("\n");
