@@ -21,12 +21,11 @@ public class KeywordsListener extends ListenerAdapter {
         if(event.getAuthor().isBot()) return;
         //first check for link in message
         String message = event.getMessage().getContentRaw();
-        String keyword;
+        Keyword keyword;
         for(String word: message.split("\\s++")){
             if(Pattern.matches(EmbedBuilder.URL_PATTERN.pattern(), word)){
                 try {
                     message = CommonUtil.read(word);
-                    System.out.println(message);//problem
                 } catch (Exception e) {
                     logger.warn("Error while reading link, proceeding with normal message", e);
                     message = event.getMessage().getContentRaw();
@@ -35,13 +34,10 @@ public class KeywordsListener extends ListenerAdapter {
         }
         //then check for keyword in message
         keyword = Keyword.findKeyword(message);
-        if(!(keyword == null)){
-            Keyword keywordObj = new Keyword(keyword);
-            event.getMessage().reply(keywordObj.getRandomResponse()).mentionRepliedUser(false).queue();
-            event.getMessage().addReaction(keywordObj.getEmoji()).queue();
+        if(keyword != null){
+            event.getMessage().reply(keyword.getRandomResponse("%mention", event.getAuthor().getAsMention(),
+                    "%tag", event.getAuthor().getAsTag())).mentionRepliedUser(false).queue();
+            if(keyword.hasEmoji()) event.getMessage().addReaction(keyword.getEmoji()).queue();
         }
-
-
-
     }
 }
