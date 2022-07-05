@@ -14,12 +14,14 @@ public class Keyword implements Configurable {
     private final String emoji;
     private final String[] responses;
     private final boolean hasEmoji;
+    private final Boolean replay;
 
     private Keyword(String name){
         this.name = name;
         ConfigurationSection section = Bot.getInstance().getConfig().getConfigurationSection("Keywords." + name);
         this.responses = section.getStringList("Response").toArray(new String[0]);
         this.emoji = section.getString("Emoji");
+        this.replay = section.getBoolean("Replay");
         this.hasEmoji = this.emoji != null;
 
     }
@@ -44,6 +46,10 @@ public class Keyword implements Configurable {
 
     public boolean hasEmoji() {
         return hasEmoji;
+    }
+
+    public boolean shouldReplay(){
+        return replay != null && replay;
     }
 
     @Nullable

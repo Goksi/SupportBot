@@ -10,6 +10,7 @@ Settings:
   SupportRole:  #ID of your support role
   TicketName: "%name's ticket"  #You can also use %randomID to generate a random ticket id
   StaffChannel:   #Embeds for tickets would be sent here
+  MaxSizeAttachments: 3000000 #Max size of  attachments to read in bytes
 Tickets:
   MaxTickets: 5 #Maximum number of tickets per user
   MaxExtended: "You have reached the maximum amount of tickets allowed for you, please wait for one to be closed"
@@ -31,9 +32,11 @@ Keywords:
     Response:
       - "Hello %mention, how can I help you ?"
     Emoji: "U+1F44B"
+    Replay: true
   test:
     Regex: ".*test.*" #this is regex, so you can use any regex here, for testing patterns you can use something like https://regexr.com/
     Response:
       - "This is a test response"
       - "This is another test response"
     Emoji: "U+1F600" #this is going to be reacted on the message with keyword (unicode)
+    Replay: false
