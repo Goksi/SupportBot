@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import tech.goksi.supportbot.entities.Keyword;
 import tech.goksi.supportbot.utils.CommonUtil;
 
+import java.util.Objects;
+
 import java.util.regex.Pattern;
 
 public class KeywordsListener extends ListenerAdapter {
@@ -20,6 +22,7 @@ public class KeywordsListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         if(event.getAuthor().isBot()) return;
+        boolean sentResponse = false;
         //first check for link in message
         String message = event.getMessage().getContentRaw();
         Keyword keyword;
@@ -33,20 +36,30 @@ public class KeywordsListener extends ListenerAdapter {
                 }
             }
         }
+        sentResponse = answer(message, event);
+        if(sentResponse) return;
         if(event.getMessage().getAttachments().size() > 0){
             Message.Attachment attachment = event.getMessage().getAttachments().get(0);
-            if(!attachment.isImage()){
-                CommonUtil.readAttachment(attachment);
+            if(!attachment.isImage() && Objects.equals(attachment.getFileExtension(), "txt")){
+                CommonUtil.readAttachment(attachment, content -> answer(content, event));
             }
         }
         //then check for keyword in message
-        keyword = Keyword.findKeyword(message);
+
+
+    }
+
+    private boolean answer(String message, MessageReceivedEvent event){
+        if(message.isEmpty()) return false;
+        Keyword keyword = Keyword.findKeyword(message);
         if(keyword != null){
             String response = keyword.getRandomResponse("%mention", event.getAuthor().getAsMention(),
                     "%tag", event.getAuthor().getAsTag());
             if(keyword.shouldReplay()) event.getMessage().reply(response).mentionRepliedUser(false).queue();
             else event.getMessage().getTextChannel().sendMessage(response).queue();
             if(keyword.hasEmoji()) event.getMessage().addReaction(keyword.getEmoji()).queue();
+            return true;
         }
+        return false;
     }
 }

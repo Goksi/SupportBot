@@ -3,15 +3,14 @@ package tech.goksi.supportbot.utils;
 
 import net.dv8tion.jda.api.entities.Message;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
-import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 
@@ -87,15 +86,12 @@ public class CommonUtil {
         return newString;
     }
 
-    public static String readAttachment(Message.Attachment attachment){
-        if(Objects.equals(attachment.getFileExtension(), "txt")){
-            if(attachment.getSize() < Constants.MAX_ATTACHMENT_SIZE){
-                attachment.retrieveInputStream().thenAcceptAsync(is -> {
-
-                });
-            }
+    public  static void readAttachment(Message.Attachment attachment, final Consumer<? super String> consumer){
+        if(attachment.getSize() < Constants.MAX_ATTACHMENT_SIZE){
+            attachment.retrieveInputStream().thenAcceptAsync(is -> {
+                consumer.accept(new BufferedReader(new InputStreamReader(is)).lines().collect(Collectors.joining("\n")));
+            });
         }
-        return null;
     }
 
 
