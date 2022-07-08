@@ -62,7 +62,4 @@ public class Keyword implements Configurable {
         return null;
     }
 
-    private static /* synthetic */ void $$$reportNull$$$0(final int n) {
-        throw new IllegalStateException(String.format("@NotNull method %s.%s must not return null", "tech/goksi/supportbot/entities/Keyword", "getName"));
-    }
 }
