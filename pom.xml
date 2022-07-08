@@ -25,6 +25,11 @@
             <version>954802b</version>
         </dependency>
         <dependency>
+            <groupId>net.sourceforge.tess4j</groupId>
+            <artifactId>tess4j</artifactId>
+            <version>5.2.1</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.Xirado</groupId>
             <artifactId>JDA</artifactId>
             <version>68e98097bb</version>
