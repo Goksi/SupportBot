@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.goksi.supportbot.entities.Keyword;
 import tech.goksi.supportbot.utils.CommonUtil;
+import tech.goksi.supportbot.utils.ImageOCR;
 
 import java.util.Objects;
 
@@ -22,10 +23,8 @@ public class KeywordsListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         if(event.getAuthor().isBot()) return;
-        boolean sentResponse = false;
         //first check for link in message
         String message = event.getMessage().getContentRaw();
-        Keyword keyword;
         for(String word: message.split("\\s++")){
             if(Pattern.matches(EmbedBuilder.URL_PATTERN.pattern(), word)){
                 try {
@@ -36,12 +35,15 @@ public class KeywordsListener extends ListenerAdapter {
                 }
             }
         }
-        sentResponse = answer(message, event);
+        boolean sentResponse = answer(message, event);
         if(sentResponse) return;
         if(event.getMessage().getAttachments().size() > 0){
             Message.Attachment attachment = event.getMessage().getAttachments().get(0);
             if(!attachment.isImage() && Objects.equals(attachment.getFileExtension(), "txt")){
                 CommonUtil.readAttachment(attachment, content -> answer(content, event));
+            }else {
+                ImageOCR ocr = new ImageOCR(attachment);
+                ocr.getText(content -> answer(content, event));
             }
         }
         //then check for keyword in message
