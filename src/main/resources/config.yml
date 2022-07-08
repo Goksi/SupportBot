@@ -12,6 +12,7 @@ Settings:
   StaffChannel:   #Embeds for tickets would be sent here
   MaxSizeAttachments: 3000000 #Max size of  attachments to read in bytes
   OCRLanguage: "eng" #Language used for OCR, you can find the list of languages here: https://github.com/tesseract-ocr/tessdata (Third party traineddata also work)
+  CommandsPrefix: "."
 Tickets:
   MaxTickets: 5 #Maximum number of tickets per user
   MaxExtended: "You have reached the maximum amount of tickets allowed for you, please wait for one to be closed"

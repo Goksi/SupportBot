@@ -13,4 +13,6 @@ public class Constants {
     public static final String SUPPORT_ROLE_ID = Bot.getInstance().getConfig().getString("Settings.SupportRole");
     public static final String STAFF_CHANNEL = Bot.getInstance().getConfig().getString("Settings.StaffChannel");
     public static final Long MAX_ATTACHMENT_SIZE = Bot.getInstance().getConfig().getLong("Settings.MaxSizeAttachments");
+    public static final String OCR_LANGUAGE = Bot.getInstance().getConfig().getString("Settings.OCRLanguage");
+    public static final String COMMAND_PREFIX = Bot.getInstance().getConfig().getString("Settings.CommandPrefix");
 }

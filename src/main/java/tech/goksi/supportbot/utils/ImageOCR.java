@@ -23,6 +23,7 @@ public class ImageOCR {
     public void getText(final Consumer<String> consumer){
         ITesseract instance = new Tesseract();
         instance.setDatapath("src/main/resources/tessdata");
+        instance.setLanguage(Constants.OCR_LANGUAGE);
 
         attachment.retrieveInputStream().thenAcceptAsync(is -> {
             try {
