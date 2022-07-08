@@ -86,7 +86,7 @@ public class CommonUtil {
         return newString;
     }
 
-    public  static void readAttachment(Message.Attachment attachment, final Consumer<? super String> consumer){
+    public  static void readAttachment(Message.Attachment attachment, final Consumer<String> consumer){
         if(attachment.getSize() < Constants.MAX_ATTACHMENT_SIZE){
             attachment.retrieveInputStream().thenAcceptAsync(is -> {
                 consumer.accept(new BufferedReader(new InputStreamReader(is)).lines().collect(Collectors.joining("\n")));
