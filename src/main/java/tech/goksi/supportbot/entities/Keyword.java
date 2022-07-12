@@ -39,10 +39,6 @@ public class Keyword implements Configurable {
         return this.responses;
     }
 
-    public String getRandomResponse(final String... replacements) {
-        return CommonUtil.formatString(this.responses[(int) (Math.random() * this.responses.length)], replacements);
-    }
-
     public boolean hasEmoji() {
         return this.hasEmoji;
     }

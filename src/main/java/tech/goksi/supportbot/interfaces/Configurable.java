@@ -2,6 +2,7 @@ package tech.goksi.supportbot.interfaces;
 
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
+import tech.goksi.supportbot.utils.CommonUtil;
 
 public interface Configurable
 {
@@ -12,4 +13,9 @@ public interface Configurable
 
     @Nullable
     String[] getResponses();
+
+    default String getRandomResponse(final String... replacements) {
+        String[] responses = getResponses();
+        return CommonUtil.formatString(responses[(int) (Math.random() * responses.length)], replacements);
+    }
 }

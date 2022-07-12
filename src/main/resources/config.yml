@@ -42,3 +42,8 @@ Keywords:
       - "This is another test response"
     Emoji: "U+1F600" #this is going to be reacted on the message with keyword (unicode)
     Replay: false
+Commands:
+  test:
+    Response:
+      - "Hello %mention, this is a test command"
+    Delete: true #if true, the message will be deleted after the response is sent
