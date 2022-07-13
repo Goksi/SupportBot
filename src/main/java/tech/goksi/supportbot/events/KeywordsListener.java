@@ -55,6 +55,7 @@ public class KeywordsListener extends ListenerAdapter {
         if(message.isEmpty()) return false;
         Keyword keyword = Keyword.findKeyword(message);
         if(keyword != null){
+            if(keyword.getChannels() != null && !keyword.getChannels().isEmpty() && !keyword.getChannels().contains(event.getChannel().getId())) return false;
             String response = keyword.getRandomResponse("%mention", event.getAuthor().getAsMention(),
                     "%tag", event.getAuthor().getAsTag());
             if(keyword.shouldReplay()) event.getMessage().reply(response).mentionRepliedUser(false).queue();

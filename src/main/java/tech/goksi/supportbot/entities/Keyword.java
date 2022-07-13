@@ -1,8 +1,8 @@
 package tech.goksi.supportbot.entities;
 
 
+import java.util.List;
 import java.util.regex.Pattern;
-import tech.goksi.supportbot.utils.CommonUtil;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.simpleyaml.configuration.ConfigurationSection;
@@ -15,6 +15,7 @@ public class Keyword implements Configurable {
     private final String[] responses;
     private final boolean hasEmoji;
     private final Boolean replay;
+    private final List<String> channels;
 
     private Keyword(final String name) {
         this.name = name;
@@ -23,6 +24,7 @@ public class Keyword implements Configurable {
         this.emoji = section.getString("Emoji");
         this.replay = section.getBoolean("Replay");
         this.hasEmoji = (this.emoji != null);
+        this.channels = section.getStringList("Channels");
     }
 
     @NotNull
@@ -45,6 +47,10 @@ public class Keyword implements Configurable {
 
     public boolean shouldReplay() {
         return this.replay != null && this.replay;
+    }
+
+    public List<String> getChannels() {
+        return channels;
     }
 
     @Nullable

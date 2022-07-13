@@ -4,6 +4,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 import tech.goksi.supportbot.utils.CommonUtil;
 
+import java.util.List;
+
 public interface Configurable
 {
     @NotNull
@@ -13,6 +15,8 @@ public interface Configurable
 
     @Nullable
     String[] getResponses();
+
+    List<String> getChannels();
 
     default String getRandomResponse(final String... replacements) {
         String[] responses = getResponses();
