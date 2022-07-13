@@ -41,6 +41,7 @@ Keywords:
       - "This is a test response"
       - "This is another test response"
     Emoji: "U+1F600" #this is going to be reacted on the message with keyword (unicode)
+    Channels: ["934475849909026887"] #Channels where this keyword will reply, leave empty for all channels
     Replay: false
 Commands:
   test:
