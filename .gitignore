@@ -40,3 +40,5 @@ build/
 .DS_Store
 
 /config.yml
+dependency-reduced-pom.xml
+*.traineddata
