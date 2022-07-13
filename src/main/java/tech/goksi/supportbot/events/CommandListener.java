@@ -9,6 +9,7 @@ public class CommandListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         if(event.getAuthor().isBot()) return;
+        if(event.getMessage().getContentRaw().isEmpty()) return;
         if(event.getMessage().getContentRaw().startsWith(Constants.COMMAND_PREFIX)){
 
         }
