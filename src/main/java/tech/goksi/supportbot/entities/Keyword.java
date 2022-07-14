@@ -54,7 +54,7 @@ public class Keyword implements Configurable {
     }
 
     @Nullable
-    public static Keyword findKeyword(final String message) {
+    public static Keyword find(final String message) {
         for (final String key : Bot.getInstance().getConfig().getConfigurationSection("Keywords").getKeys(false)) {
             final ConfigurationSection section = Bot.getInstance().getConfig().getConfigurationSection("Keywords." + key);
             if (Pattern.compile(section.getString("Regex"), Pattern.CASE_INSENSITIVE).matcher(message).find()) {

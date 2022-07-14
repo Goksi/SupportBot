@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tech.goksi.supportbot.entities.Keyword;
 import tech.goksi.supportbot.utils.CommonUtil;
+import tech.goksi.supportbot.utils.Constants;
 import tech.goksi.supportbot.utils.ImageOCR;
 
 import java.util.Objects;
@@ -22,7 +23,7 @@ public class KeywordsListener extends ListenerAdapter {
     }
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
-        if(event.getAuthor().isBot()) return;
+        if(event.getAuthor().isBot() || event.getMessage().getContentRaw().startsWith(Constants.COMMAND_PREFIX)) return;
         //first check for link in message
         String message = event.getMessage().getContentRaw();
         for(String word: message.split("\\s++")){
@@ -53,7 +54,7 @@ public class KeywordsListener extends ListenerAdapter {
 
     private boolean answer(String message, MessageReceivedEvent event){
         if(message.isEmpty()) return false;
-        Keyword keyword = Keyword.findKeyword(message);
+        Keyword keyword = Keyword.find(message);
         if(keyword != null){
             if(keyword.getChannels() != null && !keyword.getChannels().isEmpty() && !keyword.getChannels().contains(event.getChannel().getId())) return false;
             String response = keyword.getRandomResponse("%mention", event.getAuthor().getAsMention(),
