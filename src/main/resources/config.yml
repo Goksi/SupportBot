@@ -48,3 +48,5 @@ Commands:
     Response:
       - "Hello %mention, this is a test command"
     Delete: true #if true, the message will be deleted after the response is sent
+    Emoji: "U+1F44B" #this is going to be reacted on the message with command (unicode, if Delete is true this will be ignored)
+    Channels: [] #Channels where this command will reply, leave empty for all channels

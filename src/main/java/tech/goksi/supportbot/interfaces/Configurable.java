@@ -18,6 +18,8 @@ public interface Configurable
 
     List<String> getChannels();
 
+    boolean hasEmoji();
+
     default String getRandomResponse(final String... replacements) {
         String[] responses = getResponses();
         return CommonUtil.formatString(responses[(int) (Math.random() * responses.length)], replacements);
