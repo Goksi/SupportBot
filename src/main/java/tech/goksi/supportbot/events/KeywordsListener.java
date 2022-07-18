@@ -2,6 +2,7 @@ package tech.goksi.supportbot.events;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -61,7 +62,7 @@ public class KeywordsListener extends ListenerAdapter {
                     "%tag", event.getAuthor().getAsTag());
             if(keyword.shouldReplay()) event.getMessage().reply(response).mentionRepliedUser(false).queue();
             else event.getMessage().getTextChannel().sendMessage(response).queue();
-            if(keyword.hasEmoji()) event.getMessage().addReaction(keyword.getEmoji()).queue();
+            if(keyword.hasEmoji()) event.getMessage().addReaction(Emoji.fromUnicode(keyword.getEmoji())).queue();
             return true;
         }
         return false;

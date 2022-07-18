@@ -1,5 +1,6 @@
 package tech.goksi.supportbot.events;
 
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +23,7 @@ public class CommandListener extends ListenerAdapter {
                 if(cmd.shouldDelete()) {
                     event.getMessage().delete().queue();
                 }else if(cmd.hasEmoji()) {
-                    event.getMessage().addReaction(cmd.getEmoji()).queue();
+                    event.getMessage().addReaction(Emoji.fromUnicode(cmd.getEmoji())).queue();
                 }
                 if(event.getMessage().getReferencedMessage() != null){
                     event.getMessage().getReferencedMessage().reply(response).mentionRepliedUser(false).queue();

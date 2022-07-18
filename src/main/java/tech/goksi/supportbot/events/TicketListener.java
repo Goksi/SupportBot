@@ -30,8 +30,8 @@ public class TicketListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@NotNull MessageReceivedEvent event) {
         if(TicketUtils.isTicketChannel(event.getTextChannel())){
-            if(event.getMessage().getMentionedMembers().size() > 0){
-                Member member = event.getMessage().getMentionedMembers().get(0);
+            if(event.getMessage().getMentions().getMembers().size() > 0){
+                Member member = event.getMessage().getMentions().getMembers().get(0);
                 if(!TicketUtils.canInteract(member, event.getTextChannel())){
                     JsonObject embedJson;
                     try{
