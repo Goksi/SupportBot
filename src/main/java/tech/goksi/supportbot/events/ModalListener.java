@@ -33,11 +33,12 @@ public class ModalListener extends ListenerAdapter {
         if(event.getModalId().equals("support")){
             EmbedBuilder eb = new EmbedBuilder();
             TextChannel staffChannel;
-            if((staffChannel = Bot.getInstance().getJda().getTextChannelById(Constants.STAFF_CHANNEL)) == null ){
+            if(Constants.STAFF_CHANNEL == null ){
                 eb.setColor(Color.red);
                 eb.setDescription("Error, please check your console !");
                 event.replyEmbeds(eb.build()).setEphemeral(true).queue();
                 logger.error("Error while trying to send ticket embed, please check StaffChannel inside of your config.yml");
+                return;
             }
             String title = Objects.requireNonNull(event.getValue("title")).getAsString();
             String description = Objects.requireNonNull(event.getValue("desc")).getAsString();
@@ -48,7 +49,7 @@ public class ModalListener extends ListenerAdapter {
                 logger.error("Error while reading TicketEmbed.json file !", e);
                 return;
             }
-
+            staffChannel = Bot.getInstance().getJda().getTextChannelById(Constants.STAFF_CHANNEL);
             assert staffChannel != null;
             if(description.length() > 1024){
                 try {
